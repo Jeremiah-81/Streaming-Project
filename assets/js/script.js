@@ -62,7 +62,7 @@ function handleSearchFormSubmit(event) {
                  </a>
              </h1>
              <p class="text-grey-darker text-sm">
-                 ${movieYear}
+                 (${movieYear})
              </p>
          </header>
 
