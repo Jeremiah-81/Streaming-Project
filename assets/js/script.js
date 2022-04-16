@@ -39,23 +39,45 @@ function handleSearchFormSubmit(event) {
   // call function to process 'Promise' resolution JSON data
   doRequest(searchMovie).then(data => {
     console.log(data);
-    //console.log(data.Title);
-    //console.log(data.Poster);
-    let info = document.getElementById('main');
-    let title = document.createElement('h1');
-    let img = document.createElement('img');
-    //let plotText = document.createElement('p');
-    //let runTime = document.createElement('h3');
+    let arrLen = data.Search.length;
     // loop through returned search array and display
-    for (let i = 0; i < data.length; i++) {
-    img.src = data[i].Poster;
-    title.innerText = data[i].Title + ' - ' + data[i].Year;
-    //plotText.innerText = data.Plot;
-    //runTime.innerText = 'Running Time = ' + data.Runtime;
-    info.appendChild(title);
-    info.appendChild(img);
-    //info.appendChild(runTime);
-    //info.appendChild(plotText);
+    for (let i = 0; i < arrLen; i++) {
+    let postername = data.Search[i].Poster;
+    let movieTitle = data.Search[i].Title;
+    let movieYear = data.Search[i].Year;
+    let imdb = data.Search[i].imdbID;
+    var baseHTML = `<div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+  
+     <!-- Article -->
+     <article class="overflow-hidden rounded-lg shadow-lg">
+
+         <a href="#">
+             <img alt="Poster" id="img-${i}" imdb-id=${imdb} class="block h-auto w-full" src="${postername}">
+         </a>
+
+         <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+             <h1 class="text-lg">
+                 <a class="no-underline hover:underline text-black" href="#">
+                     ${movieTitle}
+                 </a>
+             </h1>
+             <p class="text-grey-darker text-sm">
+                 ${movieYear}
+             </p>
+         </header>
+
+     </article>
+     <!-- END Article -->
+
+ </div>`;
+
+      console.log(data.Search[i].Poster);
+      var cardContain = document.getElementById("search-movie-cards");
+      cardContain.innerHTML += baseHTML;
+      //image = document.getElementById("img-" + i);
+      //console.log(image);
+      //image.src = "";
+      //document.getElementById("img-" + i).src=data.Search[i].Poster;
     };
   });
 };
