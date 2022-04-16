@@ -1,9 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 body {
-  
+  background-color: lightgray;
 }
 
+#header {
+  font-family: 'Roboto';
+  font-size: 150px;
+  opacity: 60%;
+}
 #navBar {
-  
+  background-color: black;
+}
+
+#searchB {
+  padding: 75px;
+}
+
+#searchBtn {
+  margin-left: 390px;
+  margin-top: -38px;
+ 
 }
