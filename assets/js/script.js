@@ -5,7 +5,7 @@ var searchFormEl = document.querySelector('#searchTerm');
 
 // Asynchronus function for doing FETCH, returns a 'Promise' that is
 // resolved after function returns from call
-async function doRequest(search) {
+async function omdbRequest(search) {
   //build out URL for database API
   //"1460f608" is Cliff's API key
   let url = new URL('http://www.omdbapi.com/');
@@ -24,39 +24,82 @@ async function doRequest(search) {
   }
 };
 
+async function watchmodeRequest(search) {
+  //build out URL for database API
+  //be sure to fill in YOUR API key below
+
+  let url = new URL('https://api.watchmode.com/v1/title/' + search + '/sources/');
+  let params = {'apiKey': 'LlQFg2M4CQsNVfd2kPtNc8gdCx4dGxvwKvxbOyBu'};
+  url.search = new URLSearchParams(params);
+  // put URL sent to 'fetch' into console window
+  console.log(url.href); 
+  // call fetch here, wait for reply
+  let resp = await fetch(url.href);
+  // make sure response is not an error
+  if (resp.ok) {
+      let myReply = await resp.json();
+      console.log(myReply);
+      return myReply;
+  } else {
+      return `HTTP error: ${resp.status}`;
+  }
+};
 
 // take data input from search and do API request
 function handleSearchFormSubmit(event) {
   event.preventDefault();
   //console.log(event);
   var searchMovie = document.querySelector('#searchTerm').value;
-  console.log(searchMovie);
+  //console.log(searchMovie);
   // check for blank input
   if (!searchMovie) {
     console.error('You need a search input value!');
     return;
   };
+
   // call function to process 'Promise' resolution JSON data
-  doRequest(searchMovie).then(data => {
+  omdbRequest(searchMovie).then(data => {
     console.log(data);
-    //console.log(data.Title);
-    //console.log(data.Poster);
-    let info = document.getElementById('main');
-    let title = document.createElement('h1');
-    let img = document.createElement('img');
-    //let plotText = document.createElement('p');
-    //let runTime = document.createElement('h3');
+    let arrLen = data.Search.length;
     // loop through returned search array and display
-    for (let i = 0; i < data.length; i++) {
-    img.src = data[i].Poster;
-    title.innerText = data[i].Title + ' - ' + data[i].Year;
-    //plotText.innerText = data.Plot;
-    //runTime.innerText = 'Running Time = ' + data.Runtime;
-    info.appendChild(title);
-    info.appendChild(img);
-    //info.appendChild(runTime);
-    //info.appendChild(plotText);
+    for (let i = 0; i < arrLen; i++) {
+    let postername = data.Search[i].Poster;
+    let movieTitle = data.Search[i].Title;
+    let movieYear = data.Search[i].Year;
+    let imdb = data.Search[i].imdbID;
+    // creates the 'card' for each result returned
+    var baseHTML = `<div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+  
+     <!-- Article -->
+     <article imdb-id=${imdb} class="overflow-hidden rounded-lg shadow-lg">
+
+         <a href="#">
+             <img alt="Poster" id="img-${i}" class="block h-auto w-full" src="${postername}">
+         </a>
+
+         <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+             <h1 class="text-lg">
+                 <a class="no-underline hover:underline text-black" href="#">
+                     ${movieTitle}
+                 </a>
+             </h1>
+             <p class="text-grey-darker text-sm">
+                 (${movieYear})
+             </p>
+         </header>
+
+     </article>
+     <!-- END Article -->
+
+ </div>`;
+
+      // add the card into HTML here
+      var cardContain = document.getElementById("search-movie-cards");
+      cardContain.innerHTML += baseHTML;
+      
     };
+    // Watchmode lookup
+    watchmodeRequest(data.Search[0].imdbID);
   });
 };
 
