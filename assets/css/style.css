@@ -4,11 +4,16 @@ body {
   background-color: lightgray;
 }
 
+img {
+  object-fit: cover;
+}
+
 #header {
   font-family: 'Roboto';
   font-size: 150px;
   opacity: 60%;
 }
+
 #navBar {
   background-color: black;
 }
