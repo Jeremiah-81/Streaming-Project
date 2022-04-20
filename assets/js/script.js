@@ -1,6 +1,6 @@
 
 // Query selector to 'Input Bar' element
-var searchFormEl = document.querySelector('#searchTerm');
+var searchFormEl = document.querySelector('#searchBtn');
 //console.log(searchFormEl);
 
 // Asynchronus function for doing FETCH, returns a 'Promise' that is
@@ -50,6 +50,8 @@ function handleSearchFormSubmit(event) {
   event.preventDefault();
   //console.log(event);
   var searchMovie = document.querySelector('#searchTerm').value;
+  var currentCards = document.getElementById('search-movie-cards');
+  currentCards.innerHTML = '';
   //console.log(searchMovie);
   // check for blank input
   if (!searchMovie) {
@@ -71,7 +73,7 @@ function handleSearchFormSubmit(event) {
     var baseHTML = `<div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
   
      <!-- Article -->
-     <article imdb-id=${imdb} class="overflow-hidden rounded-lg shadow-lg">
+     <article id=cardPoster imdb-id=${imdb} class="overflow-hidden rounded-lg shadow-lg">
 
          <a href="#">
              <img alt="Poster" id="img-${i}" class="block h-auto w-full" src="${postername}">
@@ -79,17 +81,17 @@ function handleSearchFormSubmit(event) {
 
          <header class="flex items-center justify-between leading-tight p-2 md:p-4">
              <h1 class="text-lg">
-                 <a class="no-underline hover:underline text-black" href="#">
+                 <p id="movieTitle" class="no-underline text-black" href="#">
                      ${movieTitle}
-                 </a>
+                 </p>
              </h1>
              <p class="text-grey-darker text-sm">
                  (${movieYear})
              </p>
          </header>
          <!-- Modal toggle -->
-         <button class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" data-modal-toggle="defaultModal">
-           Toggle modal
+         <button id="modalBtn" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" data-modal-toggle="defaultModal">
+           Streaming Sources
          </button>
          
          <!-- Main modal -->
@@ -139,4 +141,4 @@ function handleSearchFormSubmit(event) {
 };
 
 // add event listenr for 'search' input
-searchFormEl.addEventListener('search', handleSearchFormSubmit);
+searchFormEl.addEventListener('click', handleSearchFormSubmit);
