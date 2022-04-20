@@ -5,7 +5,7 @@ var searchFormEl = document.querySelector('#searchTerm');
 
 // Asynchronus function for doing FETCH, returns a 'Promise' that is
 // resolved after function returns from call
-async function doRequest(search) {
+async function omdbRequest(search) {
   //build out URL for database API
   //"1460f608" is Cliff's API key
   let url = new URL('http://www.omdbapi.com/');
@@ -24,6 +24,27 @@ async function doRequest(search) {
   }
 };
 
+async function watchmodeRequest(search) {
+  //build out URL for database API
+  //be sure to fill in YOUR API key below
+
+  let url = new URL('https://api.watchmode.com/v1/title/' + search + '/sources/');
+  let params = {'apiKey': 'LlQFg2M4CQsNVfd2kPtNc8gdCx4dGxvwKvxbOyBu'};
+  url.search = new URLSearchParams(params);
+  // put URL sent to 'fetch' into console window
+  console.log(url.href); 
+  // call fetch here, wait for reply
+  let resp = await fetch(url.href);
+  // make sure response is not an error
+  if (resp.ok) {
+      let myReply = await resp.json();
+      console.log(myReply);
+      return myReply;
+  } else {
+      return `HTTP error: ${resp.status}`;
+  }
+};
+
 // take data input from search and do API request
 function handleSearchFormSubmit(event) {
   event.preventDefault();
@@ -35,8 +56,9 @@ function handleSearchFormSubmit(event) {
     console.error('You need a search input value!');
     return;
   };
+
   // call function to process 'Promise' resolution JSON data
-  doRequest(searchMovie).then(data => {
+  omdbRequest(searchMovie).then(data => {
     console.log(data);
     let arrLen = data.Search.length;
     // loop through returned search array and display
@@ -76,6 +98,8 @@ function handleSearchFormSubmit(event) {
       cardContain.innerHTML += baseHTML;
       
     };
+    // Watchmode lookup
+    watchmodeRequest(data.Search[0].imdbID);
   });
 };
 
