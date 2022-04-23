@@ -6,21 +6,29 @@ This project uses HTML, CSS and JavaScript to query multiple APIs to retrieve da
 
 ## Installation
 
-https://tailwindcss.com/
+This page is hosted at Github Pages: [https://jeremiah-81.github.io/Streaming-Project/](https://jeremiah-81.github.io/Streaming-Project/)
 
-## Usage
+## Screen Shots:
 
-interact with the user for any request 
+![screenshot1](assets/images/Screen Shot 2022-04-23 at 11.51.12 AM.png)
+![screenshot2](assets/images/Screen Shot 2022-04-23 at 11.51.25 AM.png)
+![screenshot3](assets/images/Screen Shot 2022-04-23 at 11.51.31 AM.png)
+![screenshot4](assets/images/Screen Shot 2022-04-23 at 11.51.43 AM.png)
 
-h</u></h2>
-
-TODO - Add screen shots here
-
+*All images and graphics presented here are copyright of the respective holders. Included here under Fair Use clause of U.S. Copyright Law concerning nonprofit educational purposes. More info here: {https://www.copyright.gov/fair-use/more-info.html}(https://www.copyright.gov/fair-use/more-info.html)*
 
 ## Credits
-https://www.imdb.com/
-https://api.watchmode.com/docs/#search
-https://tailwindcss.com/
+
+This project used the Tailwind CSS framework:
+
+[https://tailwindcss.com/](https://tailwindcss.com/)
+
+The follwoing APIs were used for data sources:
+
+[The Open Movie Database (OMDb API)](https://www.omdbapi.com/)
+
+[Watchmode - the ultimate streaming availability metadata API. Netflix, Hulu, HBO Max, Prime Video, Disney+ &amp; over 100 more streaming services all indexed.](https://api.watchmode.com/)
+
 
 ## License
 MIT License
