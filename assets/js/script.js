@@ -1,7 +1,9 @@
-
+// Global Variables
 // Query selector to 'Input Bar' element
 var searchFormEl = document.querySelector('#searchBtn');
-//console.log(searchFormEl);
+
+// element selector for movie cards container
+const cardClickedEl = document.getElementById("search-movie-cards");
 
 // Asynchronus function for doing FETCH, returns a 'Promise' that is
 // resolved after function returns from call
@@ -21,24 +23,24 @@ async function omdbRequest(search) {
       return myReply;
   } else {
       return `HTTP error: ${resp.status}`;
-  }
+  };
 };
 
+// function to requesr movie sources from Watchmode API
 async function watchmodeRequest(search) {
   //build out URL for database API
   //be sure to fill in YOUR API key below
-
   let url = new URL('https://api.watchmode.com/v1/title/' + search + '/sources/');
   let params = {'apiKey': 'LlQFg2M4CQsNVfd2kPtNc8gdCx4dGxvwKvxbOyBu'};
   url.search = new URLSearchParams(params);
   // put URL sent to 'fetch' into console window
-  console.log(url.href); 
+  //console.log(url.href); 
   // call fetch here, wait for reply
   let resp = await fetch(url.href);
   // make sure response is not an error
   if (resp.ok) {
       let myReply = await resp.json();
-      console.log(myReply);
+      //console.log(myReply);
       return myReply;
   } else {
       return `HTTP error: ${resp.status}`;
@@ -73,15 +75,15 @@ function handleSearchFormSubmit(event) {
     var baseHTML = `<div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
   
      <!-- Article -->
-     <article id=cardPoster imdb-id=${imdb} class="overflow-hidden rounded-lg shadow-lg">
+     <article id="cardPoster" class="overflow-hidden rounded-lg shadow-lg">
 
-         <a href="#">
+         <div>
              <img alt="Poster" id="img-${i}" class="block h-auto w-full" src="${postername}">
-         </a>
+         </div>
 
          <header class="flex items-center justify-between leading-tight p-2 md:p-4">
              <h1 class="text-lg">
-                 <p id="movieTitle" class="no-underline text-black" href="#">
+                 <p id="movieTitle" class="no-underline text-black">
                      ${movieTitle}
                  </p>
              </h1>
@@ -90,7 +92,7 @@ function handleSearchFormSubmit(event) {
              </p>
          </header>
          <!-- Modal toggle -->
-         <button id="modalBtn" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" data-modal-toggle="defaultModal">
+         <button id=${imdb} class="modalBtn block text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" data-modal-toggle="defaultModal">
            Streaming Sources
          </button>
          
@@ -134,11 +136,49 @@ function handleSearchFormSubmit(event) {
       var cardContain = document.getElementById("search-movie-cards");
       cardContain.innerHTML += baseHTML;
       
+    };// end of 'for' loop
+
+  }); // end 'then.'
+}; // end function 'handleSearchFormSubmit'
+
+function parseWatchmode(sourcesObj) {
+    let moviesSource = [];
+    let resultsIdx = 0;
+    for (let i = 0; i < sourcesObj.length; i++) {
+        if (sourcesObj[i].format === "HD") {
+        moviesSource[resultsIdx] = {"name": sourcesObj[i].name, "format": sourcesObj[i].format, "url":  sourcesObj[i].web_url};
+        resultsIdx++;
+        };
     };
-    // Watchmode lookup
-    watchmodeRequest(data.Search[0].imdbID);
-  });
+    return moviesSource;
 };
+
+// function for click on returned movie search results
+function handleStreamSourceSelect(event) {
+    let clickTarget = event.target.getAttribute("id");
+    if (clickTarget === null) {
+        console.log("NO DATA!");
+        return;
+    };
+    let first = clickTarget.slice(0, 2);
+    //console.log(first);
+    if (first != 'tt') {
+        console.log(clickTarget);
+        return;
+    } else {
+        //console.log("imdb-id received");
+        // do request to Watchmode API
+        watchmodeRequest(clickTarget).then(data => {
+            //console.log(data);
+            let myData = parseWatchmode(data);
+            console.log(myData);
+        });
+        
+    };
+};// end of handleStreamSourceSelect function
 
 // add event listenr for 'search' input
 searchFormEl.addEventListener('click', handleSearchFormSubmit);
+
+// event listener for movie cards that were generated
+cardClickedEl.addEventListener('click', handleStreamSourceSelect);
