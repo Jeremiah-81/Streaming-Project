@@ -57,3 +57,9 @@ font-weight: 400;
 #cardPoster { 
   background-color: white;
 }
+
+#nextBtn {
+  position:static;
+  bottom: 5%;
+  right:20%;
+}
