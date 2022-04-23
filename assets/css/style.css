@@ -61,4 +61,35 @@ font-weight: 400;
 
 #cardPoster { 
   background-color: white;
+<<<<<<< Updated upstream
+=======
+}
+
+#nextBtn {
+  position:static;
+  bottom: 5%;
+  right:20%;
+}
+
+.inline-block{
+  background-color: red;
+}
+
+.inline-block:hover {
+  width: 220px;
+  height: 50px;
+  color: #fff;
+  background: red;
+  cursor: pointer;
+  border-radius: 10px;
+  background-position: 100% 0;
+  -o-transition: all .4s ease-in-out;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  border: none; 
+}
+
+#nextBtn {
+  display: none;
+>>>>>>> Stashed changes
 }
