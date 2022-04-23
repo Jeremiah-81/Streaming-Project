@@ -17,6 +17,10 @@ img {
 #navBar {
   background-color: black;
 }
+#searchTerm {
+background-color: black;
+color: white;
+}
 
 #searchB {
   padding: 75px;
@@ -62,4 +66,5 @@ font-weight: 400;
   position:static;
   bottom: 5%;
   right:20%;
+  display: none;
 }
