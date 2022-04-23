@@ -159,6 +159,7 @@ function parseWatchmode(sourcesObj) {
 
 //parse links and place on modal window
 function showLinksModal(idNum, dataObj) {
+    // selects the right container for the links on the modal popup
     let linksEl = document.querySelector('[imdb-id="' +idNum+ '"]');
     let indexObj = dataObj.length;
     let linksContain = document.createElement('div')
@@ -166,10 +167,12 @@ function showLinksModal(idNum, dataObj) {
         let linkTxt = dataObj[i].name;
         let linkURL = dataObj[i].url;
         let linkType = dataObj[i].type;
-        let typeTxt = "Stream";
+        let typeTxt = "Stream";// default link type
+        // if the link type is "buy" this will change the text to than instead of the default
         if (linkType === "buy") {
             typeTxt = "Buy";
         };
+        // this builds out the link for the modal window
         let linkBaseHTML = `<a href="${linkURL}" class="underline decoration-transparent hover:decoration-inherit transition duration-300 ease-in-out" target="_blank">${typeTxt} from ${linkTxt}</a><br>`
         linksContain.innerHTML += linkBaseHTML;
         };
@@ -179,25 +182,28 @@ function showLinksModal(idNum, dataObj) {
 
 // function for click on returned movie search results
 function handleStreamSourceSelect(event) {
+    // selects the item "id" name that was clicked on
     let clickTarget = event.target.getAttribute("id");
     //console.log(clickTarget);
+    // check that the targe returned is not a NULL (invalid)
     if (clickTarget === null) {
         console.log("NO DATA!");
         return;
     };
-    // select the first two characters of the movie id, make sure it's a valid IMDB id
+    // select the first two characters of the movie id
     let first = clickTarget.slice(0, 2);
-    //console.log(first);
+    // make sure it's a valid IMDB id
     if (first != 'tt') {
         //console.log(clickTarget);
         return;
     } else {
         //console.log("imdb-id received");
-        // do request to Watchmode API
+        // do request to Watchmode API here
           watchmodeRequest(clickTarget).then(data => {
             console.log(data);
             let myData = parseWatchmode(data);
             //console.log(myData);
+            // after returned Watchmode API data is parsed into an object
             showLinksModal(clickTarget, myData);
         });
         
