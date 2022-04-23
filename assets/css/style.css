@@ -26,20 +26,16 @@ img {
 
 #searchBtn {
   background-color: red;
- 
-  
-
- 
 }
 
-.modalBtn {
+button[id^='tt'] {
   background-color: red;
   margin: 5px;
   padding: 10px;
   border: none;
 }
 
-.modalBtn:hover {
+button[id^='tt']:hover {
   width: 220px;
   height: 50px;
   color: #fff;
@@ -57,7 +53,6 @@ img {
 font-size: 25px;
 font-weight: 400;
 }
-
 
 #cardPoster { 
   background-color: white;

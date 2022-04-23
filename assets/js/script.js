@@ -5,8 +5,8 @@ var searchFormEl = document.querySelector('#searchBtn');
 // element selector for movie cards container
 const cardClickedEl = document.getElementById("search-movie-cards");
 
-// Asynchronus function for doing FETCH, returns a 'Promise' that is
-// resolved after function returns from call
+// Asynchronus function for doing FETCH from OMDB API, 
+// returns a 'Promise' that is resolved after function returns from call
 async function omdbRequest(search) {
   //build out URL for database API
   //"1460f608" is Cliff's API key
@@ -26,7 +26,8 @@ async function omdbRequest(search) {
   };
 };
 
-// function to requesr movie sources from Watchmode API
+// Asynchronus function to request movie sources from Watchmode API
+// returns a 'Promise' that is resolved after function returns from call
 async function watchmodeRequest(search) {
   //build out URL for database API
   //be sure to fill in YOUR API key below
@@ -48,30 +49,35 @@ async function watchmodeRequest(search) {
 };
 
 // take data input from search and do API request
+// then render out HTML for cards to display search results
 function handleSearchFormSubmit(event) {
-  event.preventDefault();
-  //console.log(event);
-  var searchMovie = document.querySelector('#searchTerm').value;
-  var currentCards = document.getElementById('search-movie-cards');
-  currentCards.innerHTML = '';
-  //console.log(searchMovie);
-  // check for blank input
-  if (!searchMovie) {
-    console.error('You need a search input value!');
-    return;
-  };
+    event.preventDefault();
+    //console.log(event);
+    var searchMovie = document.querySelector('#searchTerm').value;
+    var currentCards = document.getElementById('search-movie-cards');
+    currentCards.innerHTML = '';
+    //console.log(searchMovie);
+    // check for blank input here
+    if (!searchMovie) {
+        console.error('You need a search input value!');
+        return;
+        };
 
-  // call function to process 'Promise' resolution JSON data
-  omdbRequest(searchMovie).then(data => {
-    console.log(data);
-    let arrLen = data.Search.length;
-    // loop through returned search array and display
-    for (let i = 0; i < arrLen; i++) {
-    let postername = data.Search[i].Poster;
-    let movieTitle = data.Search[i].Title;
-    let movieYear = data.Search[i].Year;
-    let imdb = data.Search[i].imdbID;
-    // creates the 'card' for each result returned
+    // call function to process 'Promise' resolution JSON data
+    omdbRequest(searchMovie).then(data => {
+        console.log(data);
+        let arrLen = data.Search.length;
+        // loop through returned search array and display
+        for (let i = 0; i < arrLen; i++) {
+        let postername = data.Search[i].Poster;
+        let movieTitle = data.Search[i].Title;
+        let movieYear = data.Search[i].Year;
+        let imdb = data.Search[i].imdbID;
+        // if no cover image is returned, then use placeholder image instead
+        if (postername === "N/A") {
+            postername = "https://www.fillmurray.com/370/500";
+        }
+    // creates the 'card' HTML for each result returned
     var baseHTML = `<div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
   
      <!-- Article -->
@@ -91,42 +97,39 @@ function handleSearchFormSubmit(event) {
                  (${movieYear})
              </p>
          </header>
-         <!-- Modal toggle -->
-         <button id=${imdb} class="modalBtn block text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" data-modal-toggle="defaultModal">
-           Streaming Sources
-         </button>
+    <!-- Search streaming services and Modal toggle button -->
+    <button id=${imdb} type="button"
+  class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+  data-bs-toggle="modal" data-bs-target="#staticBackdrop${i}">
+  Show Streaming Sources
+</button>
          
-         <!-- Main modal -->
-         <div id="defaultModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-modal md:h-full">
-             <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-                 <!-- Modal content -->
-                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                     <!-- Modal header -->
-                     <div class="flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600">
-                         <h3 class="text-xl font-semibold text-gray-900 lg:text-2xl dark:text-white">
-                             Terms of Service
-                         </h3>
-                         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="defaultModal">
-                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>  
-                         </button>
-                     </div>
-                     <!-- Modal body -->
-                     <div class="p-6 space-y-6">
-                         <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                           
-                         </p>
-                         <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                             
-                         </p>
-                     </div>
-                     <!-- Modal footer -->
-                     <div class="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
-                         <button data-modal-toggle="defaultModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I accept</button>
-                         <button data-modal-toggle="defaultModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Decline</button>
-                     </div>
-                 </div>
-             </div>
-         </div>
+<!-- Main modal -->
+<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+  id="staticBackdrop${i}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog relative w-auto pointer-events-none">
+    <div
+      class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+      <div
+        class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+        <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel${i}">
+          Streaming Sources for ${movieTitle}
+        </h5>
+        <button type="button"
+          class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+          data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="links-area${i}" imdb-id="${imdb}" class="modal-body relative p-4"></div>
+      <div
+        class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+        <button type="button"
+          class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+          data-bs-dismiss="modal">Close</button>       
+      </div>
+    </div>
+  </div>
+</div>
      </article>
      <!-- END Article -->
 
@@ -141,39 +144,64 @@ function handleSearchFormSubmit(event) {
   }); // end 'then.'
 }; // end function 'handleSearchFormSubmit'
 
+// parses through returned results from Watchmode API
 function parseWatchmode(sourcesObj) {
     let moviesSource = [];
     let resultsIdx = 0;
     for (let i = 0; i < sourcesObj.length; i++) {
         if (sourcesObj[i].format === "HD") {
-        moviesSource[resultsIdx] = {"name": sourcesObj[i].name, "format": sourcesObj[i].format, "url":  sourcesObj[i].web_url};
+        moviesSource[resultsIdx] = {"name": sourcesObj[i].name, "format": sourcesObj[i].format, "type": sourcesObj[i].type, "url": sourcesObj[i].web_url};
         resultsIdx++;
         };
     };
     return moviesSource;
 };
 
+//parse links and place on modal window
+function showLinksModal(idNum, dataObj) {
+    let linksEl = document.querySelector('[imdb-id="' +idNum+ '"]');
+    let indexObj = dataObj.length;
+    let linksContain = document.createElement('div')
+    for (let i = 0; i < indexObj; i++) {
+        let linkTxt = dataObj[i].name;
+        let linkURL = dataObj[i].url;
+        let linkType = dataObj[i].type;
+        let typeTxt = "Stream";
+        if (linkType === "buy") {
+            typeTxt = "Buy";
+        };
+        let linkBaseHTML = `<a href="${linkURL}" class="underline decoration-transparent hover:decoration-inherit transition duration-300 ease-in-out" target="_blank">${typeTxt} from ${linkTxt}</a><br>`
+        linksContain.innerHTML += linkBaseHTML;
+        };
+    // append to container in modal window
+    linksEl.append(linksContain);
+};
+
 // function for click on returned movie search results
 function handleStreamSourceSelect(event) {
     let clickTarget = event.target.getAttribute("id");
+    //console.log(clickTarget);
     if (clickTarget === null) {
         console.log("NO DATA!");
         return;
     };
+    // select the first two characters of the movie id, make sure it's a valid IMDB id
     let first = clickTarget.slice(0, 2);
     //console.log(first);
     if (first != 'tt') {
-        console.log(clickTarget);
+        //console.log(clickTarget);
         return;
     } else {
         //console.log("imdb-id received");
         // do request to Watchmode API
-        watchmodeRequest(clickTarget).then(data => {
-            //console.log(data);
+          watchmodeRequest(clickTarget).then(data => {
+            console.log(data);
             let myData = parseWatchmode(data);
-            console.log(myData);
+            //console.log(myData);
+            showLinksModal(clickTarget, myData);
         });
         
+    
     };
 };// end of handleStreamSourceSelect function
 
