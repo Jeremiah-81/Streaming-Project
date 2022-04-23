@@ -69,6 +69,7 @@ font-weight: 400;
   position:static;
   bottom: 5%;
   right:20%;
+  display: none;
 }
 
 .inline-block{
@@ -89,7 +90,7 @@ font-weight: 400;
   border: none; 
 }
 
-#nextBtn {
-  display: none;
+
+  
 >>>>>>> Stashed changes
 }
