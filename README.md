@@ -6,22 +6,23 @@ This project uses HTML, CSS and JavaScript to query multiple APIs to retrieve da
 
 ## Installation
 
-TODO - Add installation notes here
+https://tailwindcss.com/
 
 ## Usage
 
-TODO - Add project usage here
+interact with the user for any request 
 
-<h2><u>Screenshots:</u></h2>
+h</u></h2>
 
 TODO - Add screen shots here
 
-## Credits
 
-TODO - Project credits here
+## Credits
+https://www.imdb.com/
+https://api.watchmode.com/docs/#search
+https://tailwindcss.com/
 
 ## License
-
 MIT License
 
 Copyright (c) 2022
