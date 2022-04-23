@@ -1,4 +1,4 @@
-// Global Variables
+// Global variables here
 // Query selector to 'Input Bar' element
 var searchFormEl = document.querySelector('#searchBtn');
 
@@ -9,8 +9,8 @@ const cardClickedEl = document.getElementById("search-movie-cards");
 // returns a 'Promise' that is resolved after function returns from call
 async function omdbRequest(search) {
   //build out URL for database API
-  //"1460f608" is Cliff's API key
-  let url = new URL('http://www.omdbapi.com/');
+  //be sure to fill in YOUR API key below
+  let url = new URL('https://www.omdbapi.com/');
   let params = {'apikey': '1460f608', 's': search};
   url.search = new URLSearchParams(params);
   // put URL sent to 'fetch' into console window
@@ -54,9 +54,9 @@ function handleSearchFormSubmit(event) {
     event.preventDefault();
     //console.log(event);
     var searchMovie = document.querySelector('#searchTerm').value;
+    // this clears out any existing results in the container HTML
     var currentCards = document.getElementById('search-movie-cards');
     currentCards.innerHTML = '';
-    //console.log(searchMovie);
     // check for blank input here
     if (!searchMovie) {
         console.error('You need a search input value!');
@@ -148,13 +148,14 @@ function handleSearchFormSubmit(event) {
 function parseWatchmode(sourcesObj) {
     let moviesSource = [];
     let resultsIdx = 0;
+    // loop through the object that is passed in to determine the format of each
     for (let i = 0; i < sourcesObj.length; i++) {
         if (sourcesObj[i].format === "HD") {
         moviesSource[resultsIdx] = {"name": sourcesObj[i].name, "format": sourcesObj[i].format, "type": sourcesObj[i].type, "url": sourcesObj[i].web_url};
         resultsIdx++;
         };
     };
-    return moviesSource;
+    return moviesSource;// return an object array after the desired formats are picked out
 };
 
 //parse links and place on modal window
@@ -162,21 +163,22 @@ function showLinksModal(idNum, dataObj) {
     // selects the right container for the links on the modal popup
     let linksEl = document.querySelector('[imdb-id="' +idNum+ '"]');
     let indexObj = dataObj.length;
+    // create a DIV for the links on the modal window
     let linksContain = document.createElement('div')
     for (let i = 0; i < indexObj; i++) {
         let linkTxt = dataObj[i].name;
         let linkURL = dataObj[i].url;
         let linkType = dataObj[i].type;
-        let typeTxt = "Stream";// default link type
-        // if the link type is "buy" this will change the text to than instead of the default
+        let typeTxt = "Stream";// sets default link type
+        // if the link type is "buy" this will change the text to that instead of the default
         if (linkType === "buy") {
             typeTxt = "Buy";
         };
-        // this builds out the link for the modal window
+        // this builds out the HTML link for the modal window
         let linkBaseHTML = `<a href="${linkURL}" class="underline decoration-transparent hover:decoration-inherit transition duration-300 ease-in-out" target="_blank">${typeTxt} from ${linkTxt}</a><br>`
         linksContain.innerHTML += linkBaseHTML;
         };
-    // append to container in modal window
+    // append the result to container in modal window
     linksEl.append(linksContain);
 };
 
@@ -200,7 +202,7 @@ function handleStreamSourceSelect(event) {
         //console.log("imdb-id received");
         // do request to Watchmode API here
           watchmodeRequest(clickTarget).then(data => {
-            console.log(data);
+            //console.log(data);
             let myData = parseWatchmode(data);
             //console.log(myData);
             // after returned Watchmode API data is parsed into an object
